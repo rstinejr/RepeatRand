@@ -75,9 +75,10 @@ Rand value 5436 generated, number 20
 All threads completed. Ciao!
 ```
 
-# Why Does This Happen?
+# Why Are Values Repeated?
 
-The ```rand()``` method uses the value of the last pseudo random number to produce the next one. Perhaps this context is unique to each thread.
+The ```rand()``` method uses the value of the last pseudo random number to produce the next one. Perhaps this context is unique to each thread, and each thread is starting 
+with the same initial values.
 
 # What's Next?
 
