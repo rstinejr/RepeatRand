@@ -35,6 +35,18 @@ thread loops over a short sleep command until the global bool ```shutdownThreads
 is set, at which point it terminates.
 
 
+If executed with no arguments,```RepeatRand``` throws an exception at the first duplicate
+output from ```rand()```. On my machine, this happens the second time that ```rand()``` is called.
+
+After the exception is dismissed, the output from ```RepeatRand``` is:
+
+```
+D:\RepeatRand>x64\Debug\RepeatRand
+Kick off threads. Checking to avoid dups is NOT enabled.
+Rand value 41 generated, number 1
+Dup rand 41 found, after 1 successfully generated.
+```
+
 Here is an example of output when "--check" is specified:
 
 ```
