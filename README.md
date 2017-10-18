@@ -5,6 +5,15 @@ I was using rand() to generate handles to objects, and saw a bunch of weird beha
 
 This tiny project replicates that behavior.
 
+# Building and Running
+
+I created this project on 64-bit Windows 10, using VisualStudio 2017. You can download 
+the free, community version VisualStudio from https://dot.net.
+
+The code lauches a few threads. Each thread gets a value from ```rand()```. If
+two threads generate the same value, then the code throws an exception.
+
+
 # Why Does This Happen?
 
-The rand() method uses the value of the last pseudo random number to produce the next one. Perhaps this context is unique to each thread.
+The ```rand()``` method uses the value of the last pseudo random number to produce the next one. Perhaps this context is unique to each thread.
