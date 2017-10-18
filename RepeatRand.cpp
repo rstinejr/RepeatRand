@@ -12,8 +12,14 @@ bool shutdownThreads = false;
 std::mutex    randMtx;
 std::set<int> rands;
 
+/*
+* GetRand: get a value from rand(). If it is the same as a previously generated value, throw
+* an exception.  All actions within this method are synchornized by mutex randMtx.:w
+*/
 int GetRand()
 {	
+	static int cnt = 0;
+
 	std::lock_guard<std::mutex> lock(randMtx);
 
 	int r = rand();
@@ -22,18 +28,27 @@ int GetRand()
 	iter = rands.find(r);
 	if (iter != rands.end())
 	{
+		// Whups - r is already in rands!
 		std::stringstream strm;
-		strm << "Dup rand found: " << r;
+		strm << "Dup rand " << r << " found, after " << rands.size() << " successfully generated." << std::endl;;
+
+		std::cerr << strm.str().c_str() << std::endl;
+
 		throw new std::exception(strm.str().c_str());
 	}
-	
+
 	rands.insert(r);
 	
+	std::cout << "Rand value " << r << " generated, number " << ++cnt << std::endl << std::flush;
+
 	return r;
 }
 
-extern "C"
-DWORD WINAPI MyThreadFunc(LPVOID threadParam)
+/*
+* Function executed by threads. It gets a random value, then goes into a sleep/check/sleep loop until 
+* the global bool "shutdownThreads" is set.
+*/
+extern "C" DWORD WINAPI MyThreadFunc(LPVOID threadParam)
 {
 	int h = GetRand();
 
@@ -47,10 +62,10 @@ DWORD WINAPI MyThreadFunc(LPVOID threadParam)
 
 int main()
 {
-	const int THREAD_CNT = 10;
+	const int THREAD_CNT = 3;
 	HANDLE threads[THREAD_CNT] = { 0, };
 
-	std::cout << "Kick off threads." << std::endl;
+	std::cout << "Kick off threads." << std::endl << std::flush;
 
 	for (int ii = 0; ii < THREAD_CNT; ii++) 
 	{
