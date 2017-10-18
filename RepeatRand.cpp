@@ -7,7 +7,11 @@
 #include <set>
 #include <sstream>
 
+static std::string CHECK("--check");
+static std::string HELP("--help");
+
 bool shutdownThreads = false;
+bool checkForDups    =  false;
 
 std::mutex    randMtx;
 std::set<int> rands;
@@ -17,24 +21,40 @@ std::set<int> rands;
 * an exception.  All actions within this method are synchornized by mutex randMtx.:w
 */
 int GetRand()
-{	
+{
 	static int cnt = 0;
 
 	std::lock_guard<std::mutex> lock(randMtx);
 
-	int r = rand();
+	int r;
 
-	std::set<int>::iterator iter;
-	iter = rands.find(r);
-	if (iter != rands.end())
+	if (!checkForDups)
 	{
-		// Whups - r is already in rands!
-		std::stringstream strm;
-		strm << "Dup rand " << r << " found, after " << rands.size() << " successfully generated." << std::endl;;
+		r = rand();
+		std::set<int>::iterator iter = rands.find(r);
+		if (iter != rands.end())
+		{
+			// Whups - r is already in rands!
+			std::stringstream strm;
+			strm << "Dup rand " << r << " found, after " << rands.size() << " successfully generated." << std::endl;;
 
-		std::cerr << strm.str().c_str() << std::endl;
+			std::cerr << strm.str().c_str() << std::endl;
 
-		throw new std::exception(strm.str().c_str());
+			throw new std::exception(strm.str().c_str());
+		}
+	}
+	else
+	{
+		// Handle dups
+		for (; ; )
+		{
+			r = rand();
+			std::set<int>::iterator iter = rands.find(r);
+			if (iter == rands.end())
+			{
+				break;
+			}
+		}
 	}
 
 	rands.insert(r);
@@ -57,15 +77,31 @@ extern "C" DWORD WINAPI MyThreadFunc(LPVOID threadParam)
 		Sleep(2);
 	}
 
-	return 0;
+	return h;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-	const int THREAD_CNT = 3;
+	const int THREAD_CNT = 20;
 	HANDLE threads[THREAD_CNT] = { 0, };
 
-	std::cout << "Kick off threads." << std::endl << std::flush;
+	if (argc > 1)
+	{
+		std::string arg(argv[1]);
+		if (arg == CHECK)
+		{
+			checkForDups = true;
+		}
+		else if (arg == HELP)
+		{
+			std::cout << "usage: " << argv[0] << " [--check | --help]" << std::endl;
+			return 0;
+		}
+		
+	}
+
+	std::cout << "Kick off threads. Checking to avoid dups " << ((checkForDups) ? "IS " : "is NOT ") 
+		<< "enabled." << std::endl << std::flush;
 
 	for (int ii = 0; ii < THREAD_CNT; ii++) 
 	{
