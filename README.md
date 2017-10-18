@@ -10,10 +10,20 @@ This tiny project replicates that behavior.
 I created this project on 64-bit Windows 10, using VisualStudio 2017. You can download 
 the free, community version VisualStudio from https://dot.net.
 
+I compiled the code from VisualStudio and ran it both from the command line and the IDE.
+
+# What Does It Do?
+
 The code lauches a few threads. Each thread gets a value from ```rand()```. If
-two threads generate the same value, then the code throws an exception.
+two threads generate the same value, then the code throws an exception. Otherwise, the 
+thread loops over a short sleep command until the global bool ```shutdownThreads```
+is set.
 
 
 # Why Does This Happen?
 
 The ```rand()``` method uses the value of the last pseudo random number to produce the next one. Perhaps this context is unique to each thread.
+
+# What's Next?
+
+I wonder if this happens on Linux?
