@@ -85,7 +85,7 @@ seed value for ```rand()``` within the calling thread, and that other threads ar
 affected.  This is consistent with the behavior of *RepeatRand*: calling ```srand()``` 
 from the main thread does not change the output ```rand()``` when called from the
 worker threads.  All of which is to say that in the Windows standard library, each
-thread has a separate state for ```rand()````. The algoritm implemented by ```rand()``` 
+thread has a separate state for ```rand()```. The algoritm implemented by ```rand()``` 
 is deterministic, so identical state produces identical output.
 
 # What's Next?
