@@ -15,7 +15,7 @@ the free, community version VisualStudio from
     https://www.visualstudio.com/vs/community/ 
 
 
-I built the executable using VisualStudio 2017.
+I built the executable using VisualStudio 2017. The solution file is ```RepeatRand.sln```.
 
 # Running
 
