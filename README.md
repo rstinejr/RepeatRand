@@ -3,7 +3,7 @@
 I was using ```rand()``` to generate handles to objects, and saw a bunch of weird behavior. Finally I learned that the way I was using
 ```rand()``` caused it to emit duplicate values within a very short span. This caused problems, particularly when one thread closed and freed an object identified by a handle, and another thread tried to use that same handle to retrieve the object and execute its methods.
 
-This GitHub project has code for several C++ projects that explore this behavior.
+This GitHub project has code for two C++ projects that explore this behavior.
 
 * RepeatRand - A program that mimics the control flow of the program in which seemingly weird behavior from ```rand()``` caught my attention. C++ on Windows.
 
