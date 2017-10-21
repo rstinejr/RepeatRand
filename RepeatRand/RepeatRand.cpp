@@ -9,6 +9,7 @@
 
 static std::string CHECK("--check");
 static std::string HELP("--help");
+static std::string HELP_ALIAS("-h");
 
 bool shutdownThreads = false;
 bool checkForDups    =  false;
@@ -92,7 +93,7 @@ int main(int argc, char *argv[])
 		{
 			checkForDups = true;
 		}
-		else if (arg == HELP)
+		else if (arg == HELP || arg == HELP_ALIAS)
 		{
 			std::cout << "usage: " << argv[0] << " [--check | --help]" << std::endl;
 			return 0;
