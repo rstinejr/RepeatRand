@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 		vector<int> seq = rands[ii];
 		for (int jj = 0; jj < rands->size(); jj++)
 		{
-			cout << seq.at(jj);
+			cout << seq.at(jj) << " ";
 		}
 		cout << endl;
 	}
