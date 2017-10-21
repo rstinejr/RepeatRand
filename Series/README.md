@@ -38,7 +38,7 @@ thread.
 Here's the output I see on my laptop:
 
 ```
-D:\dev\C++\RepeatRand\Series\x64\Debug>Series.exe
+D:\dev\C++\RepeatRand\x64\Debug>Series.exe
 Kick off threads. Each will generate the first 8 values from rand().
 
 All threads have terminated.
@@ -49,3 +49,5 @@ rand() sequence from thread 2: 41 18467 6334 26500 19169 15724 11478 29358
 
 D:\dev\C++\RepeatRand\Series\x64\Debug>
 ```
+
+Each thread generates the same sequence from ```rand()```, at least for the first eight values.
