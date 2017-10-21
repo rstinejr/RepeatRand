@@ -21,6 +21,12 @@ extern "C" DWORD WINAPI MyThreadFunc(LPVOID threadParam)
 {
 	int threadID = (int) threadParam;
 	cout << "Thread " << threadID << endl;
+	int sample_size = SAMPLE_SIZE;
+	while (sample_size-- > 0)
+	{
+		rands[threadID].push_back(rand());
+	}
+
 	return NULL;
 }
 
@@ -43,7 +49,17 @@ int main(int argc, char *argv[])
 
 	WaitForMultipleObjects(THREAD_CNT, threads, TRUE, INFINITE);
 
-	std::cout << "All threads completed." << std::endl;
+	std::cout << "All threads have terminated." << std::endl;
+	for (int ii = 0; ii < THREAD_CNT; ii++)
+	{
+		cout << "rand() sequence from thread " << ii << ": ";
+		vector<int> seq = rands[ii];
+		for (int jj = 0; jj < rands->size(); jj++)
+		{
+			cout << seq.at(jj);
+		}
+		cout << endl;
+	}
 
     return 0;
 }
